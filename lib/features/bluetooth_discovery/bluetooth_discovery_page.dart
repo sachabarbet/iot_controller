@@ -9,5 +9,4 @@ class BluetoothDiscoveryPage extends StatelessWidget {
 
     );
   }
-
 }
