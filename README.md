@@ -1,6 +1,6 @@
 # iot_controller
 
-IoT module mobile app
+Iot module mobile app
 
 ## Getting Started
 
