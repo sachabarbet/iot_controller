@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:iot_controller/core/constants/mqtt_constants.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttService {
+  static final bool isSecure = false;
   static final MqttService _instance = MqttService._internal();
   factory MqttService() => _instance;
 
@@ -14,11 +14,15 @@ class MqttService {
 
   MqttService._internal() {
     client.port = mqttBrokerPort;
-    client.secure = true;
     client.keepAlivePeriod = 20;
     client.logging(on: true);
 
-    client.setProtocolV311();
+    if (isSecure) {
+      client.secure = true;
+      client.port = mqttBrokerPortSecure;
+      client.setProtocolV311();
+    }
+
     client.onConnected = onConnected;
     client.onDisconnected = onDisconnected;
     client.onSubscribed = onSubscribed;
@@ -30,12 +34,14 @@ class MqttService {
       return;
     }
 
-    // Load CA certificate from assets
-    final context = SecurityContext.defaultContext;
-    final certData = await rootBundle.load('assets/certs/ca.crt');
-    context.setTrustedCertificatesBytes(certData.buffer.asUint8List());
+    if (isSecure) {
+      // Load CA certificate from assets
+      final context = SecurityContext.defaultContext;
+      final certData = await rootBundle.load(mqttTlsCertificate);
+      context.setTrustedCertificatesBytes(certData.buffer.asUint8List());
 
-    client.securityContext = context;
+      client.securityContext = context;
+    }
 
     final connMessage = MqttConnectMessage()
         .withClientIdentifier(mqttClientIdentifier)

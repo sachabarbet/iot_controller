@@ -1,5 +1,7 @@
-const String mqttClientIdentifier = 'flutter_client';
+const String mqttClientIdentifier = '';
 const String mqttBrokerHost = '';
-const int mqttBrokerPort = 8883; // todo change to 8883 for secure connection
+const int mqttBrokerPortSecure = 8883;
+const int mqttBrokerPort = 1883;
 const String mqttBrokerUser = '';
 const String mqttBrokerPassword = '';
+const String mqttTlsCertificate = '';
