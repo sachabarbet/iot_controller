@@ -30,7 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_riverpod: ^2.6.1
   mqtt_client: ^10.5.1
+  shared_preferences: ^2.5.1
 
 dev_dependencies:
   flutter_test:
