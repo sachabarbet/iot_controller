@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() {
+import 'core/services/mqtt_service.dart';
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Force portrait screen orientation
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  // Init bluetooth service (Check valid environment for bluetooth)
+  // Init mqtt service
+  final mqttService = MqttService();
+  await mqttService.connect();
+
   runApp(const IotControllerApp());
 }
 
@@ -25,5 +30,3 @@ class IotControllerApp extends StatelessWidget {
     );
   }
 }
-
-
