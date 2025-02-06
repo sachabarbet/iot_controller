@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 
-import '../../../shared/mqtt_config/presentation/mqtt_config_provider.dart';
+import '../../../shared/mqtt/presentation/mqtt_config_provider.dart';
+import '../../../shared/mqtt/presentation/mqtt_service_provider.dart';
+import '../../led_control/presentation/led_control_widget.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -17,9 +19,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   // List of pages to navigate to
   final List<Widget> _pages = [
-    Center(child: Text('Home Page', style: TextStyle(fontSize: 24))),
-    Center(child: Text('Search Page', style: TextStyle(fontSize: 24))),
-    Center(child: Text('Profile Page', style: TextStyle(fontSize: 24))),
+    LedControlWidget(),
   ];
 
   void _onItemTapped(int index) {
