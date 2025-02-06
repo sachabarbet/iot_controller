@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 
@@ -15,38 +16,29 @@ final mqttRepositoryProvider = Provider((ref) => MqttRepository());
 final mqttConfigProvider =
     StateNotifierProvider<MqttConfigNotifier, MqttConfig>((ref) {
   final repository = ref.watch(mqttRepositoryProvider);
-  return MqttConfigNotifier(repository);
+  return MqttConfigNotifier(repository, ref);
 });
 
 class MqttConfigNotifier extends StateNotifier<MqttConfig> {
   final MqttRepository repository;
-  late final MqttService service;
+  final Ref ref;
 
-  MqttConfigNotifier(this.repository)
-      : super(const MqttConfig(
-          brokerHost: '',
-          brokerPort: 1883,
-          clientIdentifier: '',
-          username: '',
-          password: '',
-          isSecure: false,
-        )) {
-    _loadConfig();
-    service = MqttService();
+
+  MqttConfigNotifier(this.repository, this.ref)
+      : super(repository.loadMqttConfig());
+
+  void connect(BuildContext context) {
+    ref.read(mqttServiceProvider.notifier).connect(context);
   }
 
-  void _loadConfig() {
-    state = repository.loadMqttConfig();
-  }
-
-  void connect() {
-    service.loadConfig();
-    service.connect();
+  bool getConnectionTriggered() {
+    return ref.read(mqttServiceProvider.notifier).connectionTriggered;
   }
 
   Future<void> saveConfig(MqttConfig config) async {
     await repository.saveMqttConfig(config);
     state = config;
-    print(config);
+    ref.read(mqttServiceProvider.notifier).loadConfig();
+    ref.read(mqttServiceProvider.notifier).loadClient();
   }
 }

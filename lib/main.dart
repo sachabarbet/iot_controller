@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/configs/router_config.dart';
-import 'core/services/mqtt_service.dart';
 import 'core/services/shared_preferences_service.dart';
 
 Future<void> main() async {
@@ -12,9 +11,6 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await SharedPreferencesService().init();
   // Init mqtt service
-  final mqttService = MqttService();
-  mqttService.connect();
-
   runApp(const ProviderScope(child: IotControllerApp()));
 }
 

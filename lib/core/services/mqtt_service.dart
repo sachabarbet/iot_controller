@@ -1,25 +1,30 @@
 import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+
 import '../entities/mqtt_config_entity.dart';
 import '../repositories/mqtt_config_repository.dart';
+import 'snackbar_service.dart';
 
 class MqttService extends StateNotifier<MqttConnectionState> {
   late MqttServerClient client;
   late MqttConfig config;
+  bool connectionTriggered = false;
 
   MqttService() : super(MqttConnectionState.disconnected) {
     loadConfig();
-    _loadClient();
+    loadClient();
   }
 
   void loadConfig() {
     config = MqttRepository().loadMqttConfig();
   }
 
-  void _loadClient() {
+  void loadClient() {
     client = MqttServerClient(config.brokerHost, config.clientIdentifier);
     client.port = config.brokerPort;
     client.keepAlivePeriod = 20;
@@ -43,9 +48,15 @@ class MqttService extends StateNotifier<MqttConnectionState> {
     };
   }
 
-  Future<void> connect() async {
+  Future<void> connect(BuildContext? context) async {
+    connectionTriggered = true;
     if (client.connectionStatus?.state == MqttConnectionState.connected) {
-      print("Already connected to MQTT");
+      if (context != null && context.mounted) {
+        SnackBarService.triggerInformationSnackBar(
+          context,
+          "Already connected to this broker",
+        );
+      }
       return;
     }
 
@@ -66,12 +77,26 @@ class MqttService extends StateNotifier<MqttConnectionState> {
     try {
       await client.connect();
       state = client.connectionStatus!.state; // Notify UI
-      print("Connected to MQTT Broker");
+      if (context != null && context.mounted) {
+        SnackBarService.triggerSuccessSnackBar(
+          context,
+          "Connected to MQTT broker",
+        );
+      }
     } catch (e) {
-      print("Connection failed: $e");
+      if (context != null && context.mounted) {
+        SnackBarService.triggerErrorSnackBar(
+          context,
+          "Connection failed: $e",
+        );
+      }
       client.disconnect();
       state = MqttConnectionState.disconnected; // Notify UI
     }
+  }
+
+  void updateConnectionState() {
+    state = client.connectionStatus != null ? client.connectionStatus!.state : MqttConnectionState.disconnected;
   }
 
   void disconnect() {

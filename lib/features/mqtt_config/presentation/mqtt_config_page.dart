@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 
-import 'mqtt_config_provider.dart';
+import '../../../shared/mqtt_config/presentation/mqtt_config_provider.dart';
 
 class MqttConfigPage extends ConsumerStatefulWidget {
   const MqttConfigPage({super.key});
@@ -149,7 +149,7 @@ class _MqttConfigPageState extends ConsumerState<MqttConfigPage> {
               child: Divider(),
             ),
             ElevatedButton(
-              onPressed: notifier.connect,
+              onPressed: () => notifier.connect(context),
               child: const Text('Connect to MQTT Broker'),
             ),
           ],
