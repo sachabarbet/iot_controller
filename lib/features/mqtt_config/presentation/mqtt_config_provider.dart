@@ -40,11 +40,13 @@ class MqttConfigNotifier extends StateNotifier<MqttConfig> {
   }
 
   void connect() {
+    service.loadConfig();
     service.connect();
   }
 
   Future<void> saveConfig(MqttConfig config) async {
     await repository.saveMqttConfig(config);
     state = config;
+    print(config);
   }
 }

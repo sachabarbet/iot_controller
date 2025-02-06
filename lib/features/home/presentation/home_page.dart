@@ -17,8 +17,9 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
+
       body: Center(
-        child: Text("Home Page"),
+        child: Text("Home page"),
       ),
     );
   }

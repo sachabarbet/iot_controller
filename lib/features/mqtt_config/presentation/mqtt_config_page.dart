@@ -79,7 +79,7 @@ class _MqttConfigPageState extends ConsumerState<MqttConfigPage> {
       appBar: AppBar(title: const Text("Mqtt settings")),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: Column(
+        child: ListView(
           children: [
             // MQTT broker state
             Text(

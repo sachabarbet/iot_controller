@@ -11,8 +11,12 @@ class MqttService extends StateNotifier<MqttConnectionState> {
   late MqttConfig config;
 
   MqttService() : super(MqttConnectionState.disconnected) {
-    config = MqttRepository().loadMqttConfig();
+    loadConfig();
     _loadClient();
+  }
+
+  void loadConfig() {
+    config = MqttRepository().loadMqttConfig();
   }
 
   void _loadClient() {
