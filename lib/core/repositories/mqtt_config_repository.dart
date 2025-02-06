@@ -1,4 +1,4 @@
-import 'package:iot_controller/core/services/shared_preferences_service.dart';
+import '../services/shared_preferences_service.dart';
 
 import '../entities/mqtt_config_entity.dart';
 
@@ -22,7 +22,7 @@ class MqttRepository {
     await prefs.setString(_keyTlsCertificatePath, config.tlsCertificatePath);
   }
 
-  Future<MqttConfig> loadMqttConfig() async {
+  MqttConfig loadMqttConfig() {
     final prefs = SharedPreferencesService().prefs;
     return MqttConfig(
       brokerHost: prefs.getString(_keyBrokerHost) ?? 'default_host',

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/configs/router_config.dart';
 import 'core/services/mqtt_service.dart';
 import 'core/services/shared_preferences_service.dart';
 
@@ -11,9 +13,9 @@ Future<void> main() async {
   await SharedPreferencesService().init();
   // Init mqtt service
   final mqttService = MqttService();
-  await mqttService.connect();
+  mqttService.connect();
 
-  runApp(const IotControllerApp());
+  runApp(const ProviderScope(child: IotControllerApp()));
 }
 
 class IotControllerApp extends StatelessWidget {
@@ -22,13 +24,13 @@ class IotControllerApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: routerConfig,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlueAccent),
       ),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
-      home: const Scaffold(),
     );
   }
 }

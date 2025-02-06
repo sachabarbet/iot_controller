@@ -24,6 +24,7 @@ class MqttConfig {
     String? username,
     String? password,
     bool? isSecure,
+    String? tlsCertificatePath,
   }) {
     return MqttConfig(
       brokerHost: brokerHost ?? this.brokerHost,
@@ -32,7 +33,7 @@ class MqttConfig {
       username: username ?? this.username,
       password: password ?? this.password,
       isSecure: isSecure ?? this.isSecure,
-      tlsCertificatePath: tlsCertificatePath,
+      tlsCertificatePath: tlsCertificatePath ?? this.tlsCertificatePath,
     );
   }
 }
