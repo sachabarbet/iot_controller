@@ -9,7 +9,6 @@ class MqttRepository {
   static const String _keyUsername = "mqtt_username";
   static const String _keyPassword = "mqtt_password";
   static const String _keyIsSecure = "mqtt_is_secure";
-  static const String _keyTlsCertificatePath = "mqtt_tls_certificate_path";
 
   Future<void> saveMqttConfig(MqttConfig config) async {
     final prefs = SharedPreferencesService().prefs;
@@ -19,7 +18,6 @@ class MqttRepository {
     await prefs.setString(_keyUsername, config.username);
     await prefs.setString(_keyPassword, config.password);
     await prefs.setBool(_keyIsSecure, config.isSecure);
-    await prefs.setString(_keyTlsCertificatePath, config.tlsCertificatePath);
   }
 
   MqttConfig loadMqttConfig() {
@@ -31,7 +29,6 @@ class MqttRepository {
       username: prefs.getString(_keyUsername) ?? 'user',
       password: prefs.getString(_keyPassword) ?? 'password',
       isSecure: prefs.getBool(_keyIsSecure) ?? false,
-      tlsCertificatePath: prefs.getString(_keyTlsCertificatePath) ?? '',
     );
   }
 }

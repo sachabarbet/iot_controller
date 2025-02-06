@@ -17,7 +17,6 @@ class _MqttConfigPageState extends ConsumerState<MqttConfigPage> {
   late TextEditingController clientIdController;
   late TextEditingController usernameController;
   late TextEditingController passwordController;
-  late TextEditingController tlsCertificateController;
 
   @override
   void initState() {
@@ -31,8 +30,6 @@ class _MqttConfigPageState extends ConsumerState<MqttConfigPage> {
         TextEditingController(text: mqttConfig.clientIdentifier);
     usernameController = TextEditingController(text: mqttConfig.username);
     passwordController = TextEditingController(text: mqttConfig.password);
-    tlsCertificateController =
-        TextEditingController(text: mqttConfig.tlsCertificatePath);
   }
 
   @override
@@ -42,7 +39,6 @@ class _MqttConfigPageState extends ConsumerState<MqttConfigPage> {
     clientIdController.dispose();
     usernameController.dispose();
     passwordController.dispose();
-    tlsCertificateController.dispose();
     super.dispose();
   }
 
@@ -72,7 +68,6 @@ class _MqttConfigPageState extends ConsumerState<MqttConfigPage> {
       clientIdController.text = next.clientIdentifier;
       usernameController.text = next.username;
       passwordController.text = next.password;
-      tlsCertificateController.text = next.tlsCertificatePath;
     });
 
     return Scaffold(
@@ -133,15 +128,6 @@ class _MqttConfigPageState extends ConsumerState<MqttConfigPage> {
               value: mqttConfig.isSecure,
               onChanged: (value) => notifier.saveConfig(
                 mqttConfig.copyWith(isSecure: value),
-              ),
-            ),
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'TLS certificate path',
-              ),
-              controller: tlsCertificateController,
-              onChanged: (value) => notifier.saveConfig(
-                mqttConfig.copyWith(tlsCertificatePath: value),
               ),
             ),
             Padding(

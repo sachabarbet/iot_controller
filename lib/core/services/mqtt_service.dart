@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
@@ -30,7 +29,7 @@ class MqttService extends StateNotifier<MqttConnectionState> {
     client.keepAlivePeriod = 20;
     client.logging(on: true);
 
-    if (config.isSecure && config.tlsCertificatePath.isNotEmpty) {
+    if (config.isSecure) {
       client.secure = true;
       client.setProtocolV311();
     }
@@ -41,10 +40,6 @@ class MqttService extends StateNotifier<MqttConnectionState> {
 
     client.onDisconnected = () {
       state = MqttConnectionState.disconnected; // Notify UI
-    };
-
-    client.onSubscribed = (String topic) {
-      print('Subscribed to: $topic');
     };
   }
 
@@ -60,10 +55,10 @@ class MqttService extends StateNotifier<MqttConnectionState> {
       return;
     }
 
-    if (config.isSecure && config.tlsCertificatePath.isNotEmpty) {
+    if (config.isSecure) {
       final context = SecurityContext.defaultContext;
-      final certData = await rootBundle.load(config.tlsCertificatePath);
-      context.setTrustedCertificatesBytes(certData.buffer.asUint8List());
+      // final certData = await rootBundle.load(config.tlsCertificatePath);
+      // context.setTrustedCertificatesBytes(certData.buffer.asUint8List());
       client.securityContext = context;
     }
 

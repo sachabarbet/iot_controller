@@ -5,7 +5,6 @@ class MqttConfig {
   final String username;
   final String password;
   final bool isSecure;
-  final String tlsCertificatePath;
 
   const MqttConfig({
     required this.brokerHost,
@@ -14,7 +13,6 @@ class MqttConfig {
     required this.username,
     required this.password,
     required this.isSecure,
-    this.tlsCertificatePath = '',
   });
 
   MqttConfig copyWith({
@@ -24,7 +22,6 @@ class MqttConfig {
     String? username,
     String? password,
     bool? isSecure,
-    String? tlsCertificatePath,
   }) {
     return MqttConfig(
       brokerHost: brokerHost ?? this.brokerHost,
@@ -33,7 +30,6 @@ class MqttConfig {
       username: username ?? this.username,
       password: password ?? this.password,
       isSecure: isSecure ?? this.isSecure,
-      tlsCertificatePath: tlsCertificatePath ?? this.tlsCertificatePath,
     );
   }
 }
