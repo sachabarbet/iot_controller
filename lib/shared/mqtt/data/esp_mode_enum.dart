@@ -1,0 +1,4 @@
+enum EspMode {
+  auto,
+  manual;
+}

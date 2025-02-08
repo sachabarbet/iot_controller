@@ -9,11 +9,23 @@ class LedControlWidget extends ConsumerStatefulWidget {
 }
 
 class _LedControlState extends ConsumerState<LedControlWidget> {
+
+  @override
+  void initState() {
+    // TODO: subscribe to data topic and publish to ping topic
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: unsubscribe data led esp
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
 
     );
   }
-
 }

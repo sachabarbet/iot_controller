@@ -16,7 +16,6 @@ class MqttConfigNotifier extends StateNotifier<MqttConfig> {
   final MqttRepository repository;
   final Ref ref;
 
-
   MqttConfigNotifier(this.repository, this.ref)
       : super(repository.loadMqttConfig());
 
