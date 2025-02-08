@@ -6,6 +6,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import '../../../shared/mqtt/presentation/mqtt_config_provider.dart';
 import '../../../shared/mqtt/presentation/mqtt_service_provider.dart';
 import '../../led_control/presentation/led_control_widget.dart';
+import '../../shutter_control/presentation/shutter_control_widget.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -20,6 +21,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   // List of pages to navigate to
   final List<Widget> _pages = [
     LedControlWidget(),
+    ShutterControlWidget(),
   ];
 
   void _onItemTapped(int index) {

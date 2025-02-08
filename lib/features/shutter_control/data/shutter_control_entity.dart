@@ -1,35 +1,35 @@
 import '../../../shared/mqtt/data/esp_mode_enum.dart';
 
-class LedControl {
+class ShutterControl {
   final EspMode espMode;
-  final List<int> ledValues;
+  final int shutterValue;
   final int luxValue;
   final int luxTriggerOn;
   final int luxTriggerOff;
   final bool luxDebounced;
 
-  const LedControl({
+  const ShutterControl({
     required this.espMode,
-    required this.ledValues,
+    required this.shutterValue,
     required this.luxValue,
     required this.luxTriggerOn,
     required this.luxTriggerOff,
     required this.luxDebounced,
   });
 
-  LedControl copyWith({
+  ShutterControl copyWith({
     bool? isSubscribed,
     DateTime? lastUpdateAt,
     EspMode? espMode,
-    List<int>? ledValues,
+    int? shutterValue,
     int? luxValue,
     int? luxTriggerOn,
     int? luxTriggerOff,
     bool? luxDebounced,
   }) {
-    return LedControl(
+    return ShutterControl(
       espMode: espMode ?? this.espMode,
-      ledValues: ledValues ?? this.ledValues,
+      shutterValue: shutterValue ?? this.shutterValue,
       luxValue: luxValue ?? this.luxValue,
       luxTriggerOn: luxTriggerOn ?? this.luxTriggerOn,
       luxTriggerOff: luxTriggerOff ?? this.luxTriggerOff,

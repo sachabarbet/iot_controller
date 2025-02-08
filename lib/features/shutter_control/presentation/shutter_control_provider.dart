@@ -5,31 +5,31 @@ import 'package:mqtt_client/mqtt_client.dart';
 
 import '../../../shared/mqtt/data/esp_mode_enum.dart';
 import '../../../shared/mqtt/presentation/mqtt_service_provider.dart';
-import '../data/led_control_entity.dart';
-import '../data/led_topic_constants.dart';
+import '../data/shutter_control_entity.dart';
+import '../data/shutter_topic_constants.dart';
 
-final ledControlProvider = StateNotifierProvider<LedControlNotifier, LedControl>((ref) {
-  return LedControlNotifier(ref);
+final shutterControlProvider = StateNotifierProvider<ShutterControlNotifier, ShutterControl>((ref) {
+  return ShutterControlNotifier(ref);
 });
 
-class LedControlNotifier extends StateNotifier<LedControl> {
+class ShutterControlNotifier extends StateNotifier<ShutterControl> {
   final Ref ref;
 
-  LedControlNotifier(this.ref) : super(const LedControl(
+  ShutterControlNotifier(this.ref) : super(const ShutterControl(
     espMode: EspMode.auto, // Default mode
-    ledValues: [0, 0, 0],
+    shutterValue: 0,
     luxValue: 0,
     luxTriggerOn: 100,
     luxTriggerOff: 50,
     luxDebounced: false,
   ));
 
-  void updateState(LedControl newState) {
+  void updateState(ShutterControl newState) {
     state = newState;
   }
 
   void subscribeToLedState() {
-    ref.read(mqttServiceProvider.notifier).client.subscribe(ledDataTopic, MqttQos.atLeastOnce);
+    ref.read(mqttServiceProvider.notifier).client.subscribe(shutterDataTopic, MqttQos.atLeastOnce);
 
     ref.read(mqttServiceProvider.notifier).client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? messages) {
       final recMessage = messages![0].payload as MqttPublishMessage;
@@ -43,9 +43,9 @@ class LedControlNotifier extends StateNotifier<LedControl> {
   void _handleLedStateUpdate(String payload) {
     final Map<String, dynamic> data = jsonDecode(payload);
 
-    final ledControl = LedControl(
+    final ledControl = ShutterControl(
       espMode: EspMode.values[data['espMode']],
-      ledValues: List<int>.from(data['ledValues']),
+      shutterValue: data['ledValues'] ?? 0,
       luxValue: data['luxValue'] ?? 0,
       luxTriggerOn: data['luxTriggerOn'] ?? 100,
       luxTriggerOff: data['luxTriggerOff'] ?? 50,
@@ -53,31 +53,31 @@ class LedControlNotifier extends StateNotifier<LedControl> {
     );
 
     // Update state
-    ref.read(ledControlProvider.notifier).updateState(ledControl);
+    ref.read(shutterControlProvider.notifier).updateState(ledControl);
   }
 
   void requestLedState() {
     final builder = MqttClientPayloadBuilder();
     builder.addString('ping');
 
-    ref.read(mqttServiceProvider.notifier).client.publishMessage(ledPingTopic, MqttQos.atLeastOnce, builder.payload!);
+    ref.read(mqttServiceProvider.notifier).client.publishMessage(shutterPingTopic, MqttQos.atLeastOnce, builder.payload!);
   }
 
-  void setLedValues(List<int> values) {
+  void setShutterValue(int value) {
     final builder = MqttClientPayloadBuilder();
-    builder.addString(values.join(','));
+    builder.addString(value.toString());
 
-    ref.read(mqttServiceProvider.notifier).client.publishMessage(ledControlTopic, MqttQos.atLeastOnce, builder.payload!);
+    ref.read(mqttServiceProvider.notifier).client.publishMessage(shutterControlTopic, MqttQos.atLeastOnce, builder.payload!);
   }
 
   void setControlMode(EspMode mode) {
     final builder = MqttClientPayloadBuilder();
     builder.addString(mode.index.toString());
 
-    ref.read(mqttServiceProvider.notifier).client.publishMessage(ledModeTopic, MqttQos.atLeastOnce, builder.payload!);
+    ref.read(mqttServiceProvider.notifier).client.publishMessage(shutterModeTopic, MqttQos.atLeastOnce, builder.payload!);
   }
 
   void unsubscribe() {
-    ref.read(mqttServiceProvider.notifier).client.unsubscribe(ledDataTopic);
+    ref.read(mqttServiceProvider.notifier).client.unsubscribe(shutterDataTopic);
   }
 }
