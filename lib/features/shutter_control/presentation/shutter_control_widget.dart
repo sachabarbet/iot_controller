@@ -16,6 +16,7 @@ class _ShutterControlState extends ConsumerState<ShutterControlWidget> {
   void initState() {
     final ShutterControlNotifier notifier = ref.read(
         shutterControlProvider.notifier);
+    notifier.getData();
     notifier.subscribeToLedState();
     notifier.requestLedState();
     super.initState();

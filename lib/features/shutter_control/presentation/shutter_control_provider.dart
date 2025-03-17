@@ -24,6 +24,12 @@ class ShutterControlNotifier extends StateNotifier<ShutterControl> {
     luxDebounced: false,
   ));
 
+  void getData() {
+    final builder = MqttClientPayloadBuilder();
+
+    ref.read(mqttServiceProvider.notifier).client.publishMessage(shutterPingTopic, MqttQos.atLeastOnce, builder.payload!);
+  }
+
   void updateState(ShutterControl newState) {
     state = newState;
   }

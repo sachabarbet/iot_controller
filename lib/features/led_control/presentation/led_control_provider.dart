@@ -24,6 +24,12 @@ class LedControlNotifier extends StateNotifier<LedControl> {
     luxDebounced: false,
   ));
 
+  void getData() {
+    final builder = MqttClientPayloadBuilder();
+
+    ref.read(mqttServiceProvider.notifier).client.publishMessage(ledPingTopic, MqttQos.atLeastOnce, builder.payload!);
+  }
+
   void updateState(LedControl newState) {
     state = newState;
   }
