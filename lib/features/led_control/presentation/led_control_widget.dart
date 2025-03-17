@@ -61,7 +61,8 @@ class _LedControlState extends ConsumerState<LedControlWidget> {
 
   void _sendColorToMqtt(Color color) {
     // Convert color to RGB values
-    List<int> rgbValues = [color.r.toInt(), color.g.toInt(), color.b.toInt()];
+    List<int> rgbValues = [(color.r*255).toInt(), (color.g*255).toInt(), (color.b*255).toInt()];
+    print("DATAAAAAAA ->  " + rgbValues.toString());
     ref.read(ledControlProvider.notifier).setLedValues(rgbValues);
   }
 
@@ -81,17 +82,17 @@ class _LedControlState extends ConsumerState<LedControlWidget> {
                 Text("Control mode: "),
                 Row(
                   children: [
-                    Text("Auto"),
+                    Text("Manual"),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Switch(
-                        value: ledState.espMode == EspMode.manual,
+                        value: ledState.espMode == EspMode.auto,
                         onChanged: (value) => notifier.setControlMode(
                           value ? EspMode.auto : EspMode.manual,
                         ),
                       ),
                     ),
-                    Text("Manual")
+                    Text("Auto")
                   ],
                 )
               ],

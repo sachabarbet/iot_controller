@@ -36,7 +36,6 @@ class LedControlNotifier extends StateNotifier<LedControl> {
       final payload = MqttPublishPayload.bytesToStringAsString(recMessage.payload.message);
 
       _handleLedStateUpdate(payload);
-
     });
   }
 
@@ -44,7 +43,7 @@ class LedControlNotifier extends StateNotifier<LedControl> {
     final Map<String, dynamic> data = jsonDecode(payload);
 
     final ledControl = LedControl(
-      espMode: EspMode.values[data['espMode']],
+      espMode: EspMode.values[int.parse(data['espMode'])],
       ledValues: List<int>.from(data['ledValues']),
       luxValue: data['luxValue'] ?? 0,
       luxTriggerOn: data['luxTriggerOn'] ?? 100,

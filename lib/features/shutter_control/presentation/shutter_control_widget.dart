@@ -33,7 +33,7 @@ class _ShutterControlState extends ConsumerState<ShutterControlWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final ledState = ref.watch(shutterControlProvider);
+    final shutterState = ref.watch(shutterControlProvider);
     final notifier = ref.watch(shutterControlProvider.notifier);
 
     return Padding(
@@ -47,18 +47,18 @@ class _ShutterControlState extends ConsumerState<ShutterControlWidget> {
                 Text("Control mode: "),
                 Row(
                   children: [
-                    Text("Auto"),
+                    Text("Manual"),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Switch(
-                        value: ledState.espMode == EspMode.manual,
+                        value: shutterState.espMode == EspMode.auto,
                         onChanged: (value) =>
                             notifier.setControlMode(
                               value ? EspMode.auto : EspMode.manual,
                             ),
                       ),
                     ),
-                    Text("Manual")
+                    Text("Auto")
                   ],
                 )
               ],
@@ -76,9 +76,9 @@ class _ShutterControlState extends ConsumerState<ShutterControlWidget> {
             ),
             Column(
               children: [
-                Text("Value: ${ledState.shutterValue}"),
+                Text("Value: ${shutterState.shutterValue}"),
                 Slider(
-                  value: ledState.shutterValue.toDouble(),
+                  value: shutterState.shutterValue.toDouble(),
                   onChanged: (value) => notifier.setShutterValue(value.toInt()),
                   min: 0,
                   max: 100,
@@ -89,10 +89,10 @@ class _ShutterControlState extends ConsumerState<ShutterControlWidget> {
               padding: const EdgeInsets.symmetric(vertical: 24),
               child: Divider(),
             ),
-            Text("Lux value: ${ledState.luxValue}"),
-            Text("Trigger on: ${ledState.luxTriggerOn}"),
-            Text("Trigger off: ${ledState.luxTriggerOff}"),
-            Text("Debounced: ${ledState.luxDebounced}"),
+            Text("Lux value: ${shutterState.luxValue}"),
+            Text("Trigger on: ${shutterState.luxTriggerOn}"),
+            Text("Trigger off: ${shutterState.luxTriggerOff}"),
+            Text("Debounced: ${shutterState.luxDebounced}"),
           ],
         ),
       ),
