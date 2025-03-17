@@ -16,8 +16,8 @@ class _LedControlState extends ConsumerState<LedControlWidget> {
   @override
   void initState() {
     final LedControlNotifier notifier = ref.read(ledControlProvider.notifier);
-    notifier.getData();
     notifier.subscribeToLedState();
+    notifier.getData();
     notifier.requestLedState();
     super.initState();
   }
