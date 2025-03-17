@@ -63,7 +63,7 @@ class _LedControlState extends ConsumerState<LedControlWidget> {
   void _sendColorToMqtt(Color color) {
     // Convert color to RGB values
     List<int> rgbValues = [(color.r*255).toInt(), (color.g*255).toInt(), (color.b*255).toInt()];
-    print("DATAAAAAAA ->  " + rgbValues.toString());
+    print("DATAAAAAAA ->  $rgbValues");
     ref.read(ledControlProvider.notifier).setLedValues(rgbValues);
   }
 
